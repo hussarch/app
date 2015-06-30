@@ -1,4 +1,4 @@
-package com.hussar.sm.common;
+package com.hussar.sm.cg;
 
 /**
  * 

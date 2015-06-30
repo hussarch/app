@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hussar.sm.common;
+package com.hussar.sm.cg;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -73,19 +73,6 @@ public class AutoCodeGenerator {
         }
         return instanceName.toString();
     }
-
-    public List<String> getConstructionMethod1(String clazzName, String decoratedClassName, List<String> fieldNameList) {
-        List<String> list = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
-        String instanceName = getInstanceName(decoratedClassName);
-        builder.append(getTab(1)).append("public ").append(clazzName).append("(").append(decoratedClassName).append(" ").append(instanceName).append("){");
-        list.add(builder.toString());
-        for(String fieldName : fieldNameList){
-            list.add(getSetter(instanceName, fieldName));
-        }
-        list.add(getTab(1) + "}");
-        return list;
-    }
     
     
     private String getTab(int size){
@@ -105,31 +92,14 @@ public class AutoCodeGenerator {
         return builder.toString();
     }
     
-    private String getSetter(String instanceName, FieldTypeInfo fieldTypeInfo) {
+    private String getSetter(String instanceName, OrigDestFieldInfo fieldTypeInfo) {
     	StringBuilder builder = new StringBuilder();
-        builder.append(getTab(2)).append("this.").append(getSetMethodName(fieldTypeInfo.getName())).append("(")
-        .append("new ").append(fieldTypeInfo.getOrigFieldType().getSimpleName()).append("(")
-        .append(instanceName).append(".").append(getGetMethodName(fieldTypeInfo.getName())).append("));");
+        builder.append(getTab(2)).append("this.").append(getSetMethodName(fieldTypeInfo.getFieldName())).append("(")
+        .append("new ").append(fieldTypeInfo.getDest().getSimpleName()).append("(")
+        .append(instanceName).append(".").append(getGetMethodName(fieldTypeInfo.getFieldName())).append("));");
         return builder.toString();
 	}
 
-	public List<String> getConstructionMethod(String clazzName, String decoratedClassName, List<FieldTypeInfo> fieldTypeList) {
-		List<String> list = new ArrayList<>();
-		StringBuilder builder = new StringBuilder();
-		String instanceName = getInstanceName(decoratedClassName);
-		builder.append(getTab(1)).append("public ").append(clazzName).append("(").append(decoratedClassName).append(" ").append(instanceName)
-				.append("){");
-		list.add(builder.toString());
-		for (FieldTypeInfo fieldTypeInfo : fieldTypeList) {
-			if(isPrimitive(fieldTypeInfo.getOrigFieldType())){
-				list.add(getSetter(instanceName, fieldTypeInfo.getName()));
-			}else{
-				list.add(getSetter(instanceName, fieldTypeInfo));
-			}
-		}
-		list.add(getTab(1) + "}");
-		return list;
-	}
 
 	private boolean isPrimitive(Class<?> clazz) {
 		if (clazz.isPrimitive()){
@@ -153,23 +123,72 @@ public class AutoCodeGenerator {
 		return false;
 	}
 
-	public String getGeneratedCode(String originInstanceName, FieldTypeInfo fieldTypeInfo) {
-		StringBuilder builder = new StringBuilder("this.");
-		builder.append(getSetMethodName(fieldTypeInfo.getName())).append("(");
-		if(isPrimitive(fieldTypeInfo.getDestFieldType())){
-			builder.append(getInstanceValue(originInstanceName, fieldTypeInfo.getName()));
+	public List<String> getGeneratedCode(String originInstanceName, OrigDestFieldInfo fieldTypeInfo) {
+	    List<String> list = new ArrayList<>();
+		if(fieldTypeInfo.isPrimitiveField()){
+			list.add(getEvaluation(originInstanceName, fieldTypeInfo.getFieldName()));
 		}else{
-			builder.append("new ").append(fieldTypeInfo.getDestFieldType().getSimpleName())
-			.append("(").append(getInstanceValue(originInstanceName, fieldTypeInfo.getName())).append(")");
+		    list.addAll(getEvaluationList(fieldTypeInfo.getDest().getSimpleName(), originInstanceName, fieldTypeInfo.getFieldName()));
 		}
-		builder.append(");");
+		return list;
+	}
+	
+	public String getEvaluation(String originInstanceName, String fieldName){
+	    StringBuilder builder = new StringBuilder();
+	    builder.append(getFieldSetterMethod("this", fieldName)).append("(");
+        builder.append(getFieldGetterMethod(originInstanceName, fieldName));
+        builder.append(");");
+        return builder.toString();
+	}
+	
+	public List<String> getEvaluationList(String targetFeildType, String originInstanceName, String fieldName) {
+        List<String> list = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        builder.append("if(").append(getFieldGetterMethod(originInstanceName, fieldName)).append(" != null){");
+        list.add(builder.toString());
+        builder.setLength(0);
+        builder.append(getTab(1)).append(getFieldSetterMethod("this", fieldName))
+        .append("(").append("new ").append(targetFeildType).append("(")
+        .append(getFieldGetterMethod(originInstanceName, fieldName))
+        .append("));");
+        list.add(builder.toString());
+        list.add("}");
+        return list;
+    }
+	
+	private String getImplement(String name){
+	    if("List".equals(name)){
+	        return "ArrayList";
+	    }
+	    return null;
+	}
+	
+	private String getFieldGetterMethod(String instance, String fieldName){
+		StringBuilder builder = new StringBuilder();
+		builder.append(instance).append(".").append(getGetMethodName(fieldName));
 		return builder.toString();
 	}
 	
-	private String getInstanceValue(String originInstanceName, String fieldName){
-		StringBuilder builder = new StringBuilder();
-		builder.append(originInstanceName).append(".").append(getGetMethodName(fieldName));
-		return builder.toString();
-	}
+	private String getFieldSetterMethod(String instance, String fieldName){
+        StringBuilder builder = new StringBuilder();
+        builder.append(instance).append(".").append(getSetMethodName(fieldName));
+        return builder.toString();
+    }
+
+    public List<String> getEvaluationList(String originInstanceName, String fieldName) {
+        List<String> list = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        builder.append("if(").append(getFieldGetterMethod(originInstanceName, fieldName)).append(" != null){");
+        list.add(builder.toString());
+        builder.setLength(0);
+        builder.append(getTab(1)).append(getFieldSetterMethod("this", fieldName))
+        .append("(").append("new ArrayList<String>(")
+        .append(getFieldGetterMethod(originInstanceName, fieldName))
+        .append("));");
+        list.add(builder.toString());
+        list.add("}");
+        return list;
+    }
+    
     
 }

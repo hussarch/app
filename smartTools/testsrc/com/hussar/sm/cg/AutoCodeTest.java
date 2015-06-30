@@ -1,4 +1,4 @@
-package com.hussar.sm.common;
+package com.hussar.sm.cg;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.hussar.sm.cg.AutoCodeGenerator;
+import com.hussar.sm.cg.OrigDestFieldInfo;
 import com.hussar.sm.entity.dto.ImageDTO;
 
 
@@ -57,10 +59,6 @@ public class AutoCodeTest {
         assertEquals("clickUrl", generator.getInstanceName("ClickUrl"));
     }
     
-    @Test public void testGenerateConstructionMethod(){
-        List<String> actual = generator.getConstructionMethod1("FooTDO", "FooModule", getMockMethodList());
-        assertEquals(getExpectedConstructionMethodList(), actual);
-    }
     
     private List<String> getMockMethodList(){
         List<String> list = new ArrayList<>();
@@ -82,17 +80,11 @@ public class AutoCodeTest {
         return list;
     }
     
-    @Test
-    public void test_generateConstructionMethod(){
-    	 List<String> actual = generator.getConstructionMethod("FooTDO", "FooModule", getMockFieldInfoList());
-         assertEquals(getExpectedConstructionMethodList1(), actual);
-    }
-    
-    private List<FieldTypeInfo> getMockFieldInfoList(){
-    	List<FieldTypeInfo> fieldList = new ArrayList<>();
-    	fieldList.add(new FieldTypeInfo(String.class, "id"));
-    	fieldList.add(new FieldTypeInfo(String.class, "name"));
-    	fieldList.add(new FieldTypeInfo(ImageDTO.class, "image"));
+    private List<OrigDestFieldInfo> getMockFieldInfoList(){
+    	List<OrigDestFieldInfo> fieldList = new ArrayList<>();
+    	fieldList.add(new OrigDestFieldInfo(String.class, "id"));
+    	fieldList.add(new OrigDestFieldInfo(String.class, "name"));
+    	fieldList.add(new OrigDestFieldInfo(ImageDTO.class, "image"));
     	return fieldList;
     }
     
@@ -104,17 +96,6 @@ public class AutoCodeTest {
         list.add("        this.setImage(new ImageDTO(fooModule.getImage()));");
         list.add("    }");
         return list;
-    }
-    
-    @Test
-    public void test_generateConstructionMethod_withList(){
-    	List<FieldTypeInfo> fieldList = getMockFieldInfoList();
-    	List<Image> imgeList1 = new ArrayList<>();
-    	List<ImageDTO> imgeList = new ArrayList<>();
-     	fieldList.add(new FieldTypeInfo(imgeList.getClass(), imgeList1.getClass(), "imageList"));
-     	
-    	List<String> actual = generator.getConstructionMethod("FooTDO", "FooModule", fieldList);
-        assertEquals(getExpectedConstructionMethodList2(), actual);
     }
     
     private List<String> getExpectedConstructionMethodList2(){
@@ -136,24 +117,63 @@ public class AutoCodeTest {
     
     @Test
     public void test_getGeneratedCode(){
-    	String actual = generator.getGeneratedCode("fooModule", new FieldTypeInfo(String.class, "id"));
-    	assertEquals("this.setId(fooModule.getId());", actual);
+    	List<String> actual = generator.getGeneratedCode("fooModule", new OrigDestFieldInfo(String.class, "id"));
+    	assertEquals("this.setId(fooModule.getId());", actual.get(0));
     	
-    	actual = generator.getGeneratedCode("fooModule", new FieldTypeInfo(ImageDTO.class, "image"));
-    	assertEquals("this.setImage(new ImageDTO(fooModule.getImage()));", actual);
+    	actual = generator.getGeneratedCode("fooModule", new OrigDestFieldInfo(ImageDTO.class, "image"));
+    	assertEquals(getMockImageDTO(), actual);
     	
-    	List<String> strList = new ArrayList<>();
-    	actual = generator.getGeneratedCode("fooModule", new FieldTypeInfo(strList.getClass(), "positionList"));
-    	assertEquals(getStrList(), actual);
+//    	List<String> strList = new ArrayList<>();
+//    	actual = generator.getGeneratedCode("fooModule", new FieldTypeInfo(strList.getClass(), "positionList"));
+//    	assertEquals(getStrList(), actual);
+    }
+    
+    private List<String> getMockImageDTO(){
+        List<String> list = new ArrayList<>();
+        list.add("if(fooModule.getImage() != null){");
+        list.add("    this.setImage(new ImageDTO(fooModule.getImage()));");
+        list.add("}");
+        return list;
     }
     
     private String getStrList(){
     	StringBuilder builder = new StringBuilder();
     	builder.append("if(fooModule.getPositionList() != null){").append("\n");
-    	builder.append("    this.setPositionList(new ArrayList<String>();").append("\n");
-    	builder.append("    this.getPositionList().addAll(fooModule.getPositionList())").append("\n");
+    	builder.append("    this.setPositionList(new ArrayList<String>(fooModule.getPositionList());").append("\n");
     	builder.append("}");
     	return builder.toString();
+    }
+    
+    @Test
+    public void test_getEvaluation(){
+        String actual = generator.getEvaluation("moo", "name");
+        assertEquals("this.setName(moo.getName());", actual);
+    }
+    
+    @Test
+    public void test_getEvaluationList(){
+        List<String> actualList = generator.getEvaluationList("ImageDTO", "fooModule", "image");
+        assertEquals(getMockImageDTO(), actualList);
+    }
+    
+    @Test
+    public void test_getEvaluationList_withStringList(){
+        List<String> actualList = generator.getEvaluationList("fooModule", "urlList");
+        assertEquals(getMockUrlList("String"), actualList);
+    }
+
+    private List<String> getMockUrlList(String type) {
+        List<String> list = new ArrayList<>();
+        list.add("if(fooModule.getUrlList() != null){");
+        list.add("    this.setUrlList(new ArrayList<" + type +  ">(fooModule.getUrlList()));");
+        list.add("}");
+        return list;
+    }
+    
+    @Test
+    public void test_getEvaluationList_withIntList(){
+        List<String> actualList = generator.getEvaluationList("fooModule", "urlList");
+        assertEquals(getMockUrlList("Integer"), actualList);
     }
     
 }
