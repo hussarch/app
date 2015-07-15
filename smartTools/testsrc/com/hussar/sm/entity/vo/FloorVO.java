@@ -13,6 +13,8 @@ import com.hussar.sm.entity.dto.ImageDTO;
  */
 public class FloorVO {
 	
+    private int size;
+    private boolean flag;
 	private Integer id;
 	private String name;
 	private List<ImageModel> imageModelList;
@@ -62,5 +64,55 @@ public class FloorVO {
 	public void setImage(ImageModel image) {
 		this.image = image;
 	}
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (flag ? 1231 : 1237);
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((image == null) ? 0 : image.hashCode());
+        result = prime * result + ((imageModelList == null) ? 0 : imageModelList.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + size;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        FloorVO other = (FloorVO) obj;
+        if (flag != other.flag)
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (image == null) {
+            if (other.image != null)
+                return false;
+        } else if (!image.equals(other.image))
+            return false;
+        if (imageModelList == null) {
+            if (other.imageModelList != null)
+                return false;
+        } else if (!imageModelList.equals(other.imageModelList))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (size != other.size)
+            return false;
+        return true;
+    }
+
 
 }

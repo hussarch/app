@@ -2,15 +2,12 @@ package com.hussar.sm.cg;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hussar.sm.cg.AutoCodeGenerator;
-import com.hussar.sm.cg.OrigDestFieldInfo;
 import com.hussar.sm.entity.dto.ImageDTO;
 
 
@@ -122,10 +119,6 @@ public class AutoCodeTest {
     	
     	actual = generator.getGeneratedCode("fooModule", new OrigDestFieldInfo(ImageDTO.class, "image"));
     	assertEquals(getMockImageDTO(), actual);
-    	
-//    	List<String> strList = new ArrayList<>();
-//    	actual = generator.getGeneratedCode("fooModule", new FieldTypeInfo(strList.getClass(), "positionList"));
-//    	assertEquals(getStrList(), actual);
     }
     
     private List<String> getMockImageDTO(){
@@ -172,7 +165,7 @@ public class AutoCodeTest {
     
     @Test
     public void test_getEvaluationList_withIntList(){
-        List<String> actualList = generator.getEvaluationList("fooModule", "urlList");
+        List<String> actualList = generator.getEvaluationList("Integer", "fooModule", "urlList");
         assertEquals(getMockUrlList("Integer"), actualList);
     }
     

@@ -8,8 +8,10 @@ public class OrigDestFieldInfo {
     private String fieldName;
 
     public OrigDestFieldInfo(Class<?> destClass, String fieldName) {
-        this(destClass, destClass, fieldName);
-        this.primitiveField = true;
+        this.dest = new FieldClassInfo(destClass);
+        this.orig = null;
+        this.fieldName = fieldName;
+        this.primitiveField = destClass.isPrimitive() || String.class.equals(destClass);
     }
 
     public OrigDestFieldInfo(Class<?> destClass, Class<?> origClass, String fieldName) {
