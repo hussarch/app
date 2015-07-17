@@ -2,6 +2,7 @@ package com.hussar.sm.entity.vo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.hussar.sm.entity.dto.FloorDTO;
 import com.hussar.sm.entity.dto.ImageDTO;
@@ -17,21 +18,24 @@ public class FloorVO {
     private boolean flag;
 	private Integer id;
 	private String name;
-	private List<ImageModel> imageModelList;
-	private ImageModel image;
+	private Set<Long> locationIdSet;
+	private List<ImageVO> imageList;
+	private ImageVO image;
 	
-	
-	public FloorVO(FloorDTO floorDTO){
-		this.setId(floorDTO.getId());
-		this.setName(floorDTO.getName());
-		if(floorDTO.getImageList() != null){
-			imageModelList = new ArrayList<ImageModel>();
-			for(ImageDTO imageDTO : floorDTO.getImageList()){
-				imageModelList.add(new ImageModel(imageDTO));
-			}
-		}
-		this.setImage(new ImageModel(floorDTO.getImage()));
-	}
+    public FloorVO(FloorDTO floorDTO){
+        this.id = floorDTO.getId();
+        this.name = floorDTO.getName();
+        this.locationIdSet = floorDTO.getLocationIdSet();
+        if(floorDTO.getImageList() != null){
+            this.imageList = new ArrayList<ImageVO>();
+            for(ImageDTO imageDTO : floorDTO.getImageList()){
+                this.imageList.add(new ImageVO(imageDTO));
+            }
+        }
+        if(floorDTO.getImage() != null){
+            this.image = new ImageVO(floorDTO.getImage());
+        }
+    }
 
 	public Integer getId() {
 		return id;
@@ -49,19 +53,11 @@ public class FloorVO {
 		this.name = name;
 	}
 
-	public List<ImageModel> getImageModelList() {
-		return imageModelList;
-	}
-
-	public void setImageModelList(List<ImageModel> imageModelList) {
-		this.imageModelList = imageModelList;
-	}
-
-	public ImageModel getImage() {
+	public ImageVO getImage() {
 		return image;
 	}
 
-	public void setImage(ImageModel image) {
+	public void setImage(ImageVO image) {
 		this.image = image;
 	}
 
@@ -72,7 +68,7 @@ public class FloorVO {
         result = prime * result + (flag ? 1231 : 1237);
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((image == null) ? 0 : image.hashCode());
-        result = prime * result + ((imageModelList == null) ? 0 : imageModelList.hashCode());
+        result = prime * result + ((imageList == null) ? 0 : imageList.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + size;
         return result;
@@ -99,10 +95,10 @@ public class FloorVO {
                 return false;
         } else if (!image.equals(other.image))
             return false;
-        if (imageModelList == null) {
-            if (other.imageModelList != null)
+        if (imageList == null) {
+            if (other.imageList != null)
                 return false;
-        } else if (!imageModelList.equals(other.imageModelList))
+        } else if (!imageList.equals(other.imageList))
             return false;
         if (name == null) {
             if (other.name != null)
@@ -112,6 +108,22 @@ public class FloorVO {
         if (size != other.size)
             return false;
         return true;
+    }
+
+    public List<ImageVO> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<ImageVO> imageList) {
+        this.imageList = imageList;
+    }
+
+    public Set<Long> getLocationIdSet() {
+        return locationIdSet;
+    }
+
+    public void setLocationIdSet(Set<Long> locationIdSet) {
+        this.locationIdSet = locationIdSet;
     }
 
 

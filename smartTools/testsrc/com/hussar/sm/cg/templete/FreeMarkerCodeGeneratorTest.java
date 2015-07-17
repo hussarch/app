@@ -88,7 +88,7 @@ public class FreeMarkerCodeGeneratorTest {
     }
     
     private String getListExpectedGenerateCode(){
-        return "if(image.getActionList() != null){\n" +
+        return  "if(image.getActionList() != null){\n" +
                 "    List<ActionDTO> list = new ArrayList<ActionDTO>();\n" +
                 "    for(ActionModule actionModule : image.getActionList()){\n" +
                 "        list.add(new ActionDTO(actionModule));\n" +

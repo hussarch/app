@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.hussar.sm.io.CommonFileUtils;
 
 /**
@@ -14,8 +16,6 @@ import com.hussar.sm.io.CommonFileUtils;
  *
  */
 public class LocalTemplateReader {
-    
-    public static final String END_TEMPLAT_TAG = "";
     
     private List<String> templetContent;
     private Map<String, String> templateMap;
@@ -43,14 +43,14 @@ public class LocalTemplateReader {
         while(it.hasNext()){
             String[] templats = new String[2];
             line = it.next();
-            if(END_TEMPLAT_TAG.equals(line)){
+            if(StringUtils.isBlank(line)){
                 continue;
             }
             templats[0] = line;
             StringBuilder builder = new StringBuilder();
             while(it.hasNext()){
                 line = it.next();
-                if(END_TEMPLAT_TAG.equals(line)){
+                if(StringUtils.isBlank(line)){
                     break;
                 }
                 if(builder.length() > 0){
@@ -84,4 +84,5 @@ public class LocalTemplateReader {
             return name;
         }
     }
+    
 }

@@ -1,6 +1,8 @@
 package com.hussar.sm.entity.dto;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 /**
  * 
  * @author leo.chen
@@ -10,6 +12,7 @@ public class FloorDTO {
 	
 	private Integer id;
 	private String name;
+	private Set<Long> locationIdSet = new HashSet<Long>();
 	private List<ImageDTO> imageList;
 	private ImageDTO image;
 	
@@ -37,6 +40,12 @@ public class FloorDTO {
 	public void setImage(ImageDTO image) {
 		this.image = image;
 	}
+    public Set<Long> getLocationIdSet() {
+        return locationIdSet;
+    }
+    public void setLocationIdSet(Set<Long> locationIdSet) {
+        this.locationIdSet = locationIdSet;
+    }
 	
 	
 }

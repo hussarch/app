@@ -17,6 +17,7 @@ import org.junit.Test;
 public class LocalTempletReaderTest {
 
     
+    private static final String END_TEMPLAT_TAG = "";
     private LocalTemplateReader reader;
     
     /**
@@ -104,7 +105,7 @@ public class LocalTempletReaderTest {
         list.add("    }");
         list.add("    this.set${fieldName?cap_first}(list);");
         list.add("}");
-        list.add(LocalTemplateReader.END_TEMPLAT_TAG);
+        list.add(END_TEMPLAT_TAG);
         return list;
     }
     
@@ -119,7 +120,7 @@ public class LocalTempletReaderTest {
         List<String> list = new ArrayList<String>();
         list.add("common:");
         list.add(getCommonTemplet());
-        list.add(LocalTemplateReader.END_TEMPLAT_TAG);
+        list.add(END_TEMPLAT_TAG);
         return list;
     }
     
@@ -129,7 +130,7 @@ public class LocalTempletReaderTest {
         list.add("if(${origInstanceName}.get${fieldName?cap_first}() != null){");
         list.add("    this.set${fieldName?cap_first}(${origInstanceName}.get${fieldName?cap_first}());");
         list.add("}");
-        list.add(LocalTemplateReader.END_TEMPLAT_TAG);
+        list.add(END_TEMPLAT_TAG);
         return list;
     }
     

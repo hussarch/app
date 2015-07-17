@@ -7,7 +7,7 @@ import com.hussar.sm.entity.dto.ImageDTO;
  * @author leo.chen
  *
  */
-public class ImageModel {
+public class ImageVO {
 	private Long id;
 	private String url;
 	private String clickUrl ;
@@ -18,7 +18,7 @@ public class ImageModel {
 	private String heightLD;
 	private String md5;
 	
-	public ImageModel(ImageDTO imageDTO) {
+	public ImageVO(ImageDTO imageDTO) {
 	}
 	public String getClickUrl() {
 		return clickUrl;

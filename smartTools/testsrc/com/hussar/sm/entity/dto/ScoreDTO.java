@@ -1,4 +1,4 @@
-package com.hussar.sm.cg;
+package com.hussar.sm.entity.dto;
 
 /**
  * 
@@ -6,9 +6,11 @@ package com.hussar.sm.cg;
  *
  */
 public class ScoreDTO {
+    
 	private String delivery;
 	private String item;
 	private String service;
+	
 	public String getDelivery() {
 		return delivery;
 	}

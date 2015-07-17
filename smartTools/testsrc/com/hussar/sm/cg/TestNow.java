@@ -4,12 +4,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.hussar.sm.cg.core.construtor.ConstructorGenerator;
 import com.hussar.sm.entity.dto.FloorDTO;
+import com.hussar.sm.entity.vo.FloorVO;
 
 public class TestNow {
 	
@@ -90,6 +93,7 @@ public class TestNow {
 	}
 	
 	 public static void main(String[] args) {
-	     testAppend();
+	     ConstructorGenerator generator = new ConstructorGenerator(FloorVO.class, FloorDTO.class);
+	     System.out.println(generator.getMethod());
 	}
 }
