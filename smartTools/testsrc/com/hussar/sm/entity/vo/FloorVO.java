@@ -1,11 +1,9 @@
 package com.hussar.sm.entity.vo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.hussar.sm.entity.dto.FloorDTO;
-import com.hussar.sm.entity.dto.ImageDTO;
+import com.hussar.sm.entity.dto.ScoreDTO;
 
 /**
  * 
@@ -20,23 +18,9 @@ public class FloorVO {
 	private String name;
 	private Set<Long> locationIdSet;
 	private List<ImageVO> imageList;
+	private List<ScoreDTO> scoreList;
 	private ImageVO image;
 	
-    public FloorVO(FloorDTO floorDTO){
-        this.id = floorDTO.getId();
-        this.name = floorDTO.getName();
-        this.locationIdSet = floorDTO.getLocationIdSet();
-        if(floorDTO.getImageList() != null){
-            this.imageList = new ArrayList<ImageVO>();
-            for(ImageDTO imageDTO : floorDTO.getImageList()){
-                this.imageList.add(new ImageVO(imageDTO));
-            }
-        }
-        if(floorDTO.getImage() != null){
-            this.image = new ImageVO(floorDTO.getImage());
-        }
-    }
-
 	public Integer getId() {
 		return id;
 	}

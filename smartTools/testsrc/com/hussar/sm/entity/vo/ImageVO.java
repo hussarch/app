@@ -18,8 +18,6 @@ public class ImageVO {
 	private String heightLD;
 	private String md5;
 	
-	public ImageVO(ImageDTO imageDTO) {
-	}
 	public String getClickUrl() {
 		return clickUrl;
 	}

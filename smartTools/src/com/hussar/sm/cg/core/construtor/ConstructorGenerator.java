@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hussar.sm.cg.common.ClassFieldModuleReader;
+import com.hussar.sm.cg.core.pair.PairClassInfo;
 import com.hussar.sm.cg.templete.FieldModuleTypeInfo;
 import com.hussar.sm.cg.templete.FreeMarkerCodeGenerator;
 import com.hussar.sm.cg.templete.TemplateType;
@@ -23,6 +24,12 @@ public class ConstructorGenerator {
     
     private ClassFieldModuleReader classFieldModuleReader;
     private FreeMarkerCodeGenerator codeGenerator;
+    private boolean hasSuperClass;
+    
+    public ConstructorGenerator(PairClassInfo pairClassInfo) {
+        this(pairClassInfo.getDestClass(), pairClassInfo.getOrginClass());
+        this.hasSuperClass = pairClassInfo.hasSuperClass();
+    }
     
     public ConstructorGenerator(Class<?> destClass, Class<?> orginClass) {
         this(destClass.getSimpleName(), orginClass.getSimpleName());
@@ -66,6 +73,9 @@ public class ConstructorGenerator {
     public String createVoluation(List<FieldModuleTypeInfo> moduleList) {
         List<String> list = new ArrayList<String>();
         list.addAll(codeGenerator.getGeneratedCode(TemplateType.CONSTRUCTOR, getConstructorModule()));
+        if(hasSuperClass){
+            list.add(getSuperSet()); 
+        }
         for(FieldModuleTypeInfo moduleTypeInfo : moduleList){
             list.addAll(getGeneratedCode(moduleTypeInfo, 1));
         }
@@ -96,6 +106,12 @@ public class ConstructorGenerator {
         map.put("dstClazzName", this.dstClazzName);
         map.put("orignClazzName", this.orignClazzName);;
         return map;
+    }
+    
+    private String getSuperSet(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(TAB_SPACE).append("super(").append(Character.toLowerCase(this.orignClazzName.charAt(0))).append(this.orignClazzName.substring(1)).append(")");
+        return builder.toString();
     }
     
     

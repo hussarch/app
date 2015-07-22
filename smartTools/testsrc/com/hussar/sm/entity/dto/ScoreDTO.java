@@ -1,5 +1,7 @@
 package com.hussar.sm.entity.dto;
 
+import com.hussar.sm.entity.modul.ScoreModel;
+
 /**
  * 
  * @author wenjun.yu
@@ -10,6 +12,9 @@ public class ScoreDTO {
 	private String delivery;
 	private String item;
 	private String service;
+	
+	public ScoreDTO(){
+	}
 	
 	public String getDelivery() {
 		return delivery;

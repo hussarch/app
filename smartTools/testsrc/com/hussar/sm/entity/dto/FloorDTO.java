@@ -3,6 +3,8 @@ package com.hussar.sm.entity.dto;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.hussar.sm.entity.modul.ScoreModel;
 /**
  * 
  * @author leo.chen
@@ -14,6 +16,7 @@ public class FloorDTO {
 	private String name;
 	private Set<Long> locationIdSet = new HashSet<Long>();
 	private List<ImageDTO> imageList;
+	private List<ScoreModel> scoreList;
 	private ImageDTO image;
 	
 	public Integer getId() {

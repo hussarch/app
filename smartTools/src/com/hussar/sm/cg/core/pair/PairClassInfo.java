@@ -1,4 +1,4 @@
-package com.hussar.sm.cg.common;
+package com.hussar.sm.cg.core.pair;
 
 /**
  * @author yi.xiao
@@ -6,7 +6,8 @@ package com.hussar.sm.cg.common;
 public class PairClassInfo {
     
     private Class<?> destClass;
-    private Class<?> orginClass; 
+    private Class<?> orginClass;
+    private boolean hasSuperClass; 
     
     public PairClassInfo(Class<?> destClass, Class<?> orginClass){
         this.destClass = destClass;
@@ -65,6 +66,19 @@ public class PairClassInfo {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PairClassInfo [destClass=" + destClass.getSimpleName() + ", orginClass=" + orginClass.getSimpleName() + "]";
+    }
+
+    public void setHasSuperClass(boolean hasSuperClass) {
+        this.hasSuperClass = hasSuperClass;
+    }
+
+    public boolean hasSuperClass() {
+        return hasSuperClass;
     }
     
 }
