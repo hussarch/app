@@ -3,16 +3,12 @@ package com.hussar.sm.cg;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.hussar.sm.cg.core.construtor.ConstructorGenerator;
 import com.hussar.sm.entity.dto.FloorDTO;
-import com.hussar.sm.entity.vo.FloorVO;
 
 public class TestNow {
 	
@@ -92,8 +88,26 @@ public class TestNow {
 	    }
 	}
 	
+	private static int getSaleRate(int saleNum, int inventory){
+        if(saleNum >= inventory){
+            return 99;
+        }else{
+            float rate = Float.valueOf(saleNum) / Float.valueOf(inventory);
+            System.out.println(rate);
+            return new BigDecimal(rate).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).intValue();
+        }
+    }
+	
+	public static void  ff(){
+	    BigDecimal val = (new BigDecimal(175.0)).subtract(new BigDecimal(49));
+	    val = val.divide(new BigDecimal(259.0), 3, BigDecimal.ROUND_HALF_DOWN).setScale(5, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(10));
+	    System.out.println(val);
+	    val = val.setScale(1, BigDecimal.ROUND_HALF_UP);
+	    System.out.println(val);
+	}
+	
 	 public static void main(String[] args) {
-	     ConstructorGenerator generator = new ConstructorGenerator(FloorVO.class, FloorDTO.class);
-	     System.out.println(generator.getMethod());
+	    System.out.println(1%20);
+	    System.out.println(22%20); 
 	}
 }

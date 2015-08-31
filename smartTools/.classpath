@@ -8,6 +8,8 @@
 	<classpathentry kind="lib" path="libs/json-lib-2.1.jar"/>
 	<classpathentry kind="lib" path="libs/pinyin4j-2.5.0.jar"/>
 	<classpathentry kind="lib" path="libs/spring-core-3.2.9.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/gson-1.6.jar"/>
+	<classpathentry kind="lib" path="libs/freemarker.jar" sourcepath="/freemarker-2.3.23"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

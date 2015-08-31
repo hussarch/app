@@ -9,8 +9,6 @@ public class BrandDTO {
     private Integer Id;
     private String name;
     
-    
-    
     public Integer getId() {
         return Id;
     }

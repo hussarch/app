@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.hussar.sm.cg.common.LocationLineFilter;
 import com.hussar.sm.cg.core.construtor.ConstructorGenerator;
 import com.hussar.sm.cg.core.pair.PairClassGetter;
 import com.hussar.sm.cg.core.pair.PairClassInfo;
@@ -34,31 +35,38 @@ public class AppendConstructorWriter {
         for(PairClassInfo classInfo : list){
             if(!constructorExist(classInfo.getDestClass(), classInfo.getOrginClass())){
                 constructorGenerator = new ConstructorGenerator(classInfo);
-                appendConstructor(classInfo.getDestClass(), constructorGenerator.getMethod());
+                appendConstructor(classInfo.getDestClass(), "import " +  classInfo.getOrginClass().getName(), constructorGenerator.getMethod());
             }
         }
     }
 
-    private void appendConstructor(Class<?> clazz, String method) {
+    private void appendConstructor(Class<?> clazz, String importPackage , String method) {
         List<String> contentList = CommonFileUtils.getContentList(getCurrentEntityFile(clazz));
         int size = contentList.size();
         int i = 0;
         String line;
+        LocationLineFilter importLocation = new LocationLineFilter(new String[]{"/**", "public class " + clazz.getSimpleName()});
+        LocationLineFilter constructorLocation = new LocationLineFilter(new String[]{"()", "("});
         while(i < size){
             line = contentList.get(i);
-            if(line.indexOf("()") > 0 || line.indexOf("(") > 0){
+            if(importLocation.match(line, i) && constructorLocation.match(line, i)){
                 break;
             }
             i++;
         }
-        if(StringUtils.isNotBlank(contentList.get(i - 1))){
-            contentList.add(i - 1, "");
-        }
-        if(StringUtils.isNotBlank(contentList.get(i))){
-            contentList.add(i, "");
-        }
-        contentList.add(i, method);
+        appendCode(contentList, constructorLocation.getLine(), method);
+        appendCode(contentList, importLocation.getLine(), importPackage);
         CommonFileUtils.writeFile(getNewEntityFile(clazz), contentList);
+    }
+    
+    private void appendCode(List<String> contentList, int index, String code){
+        if(StringUtils.isNotBlank(contentList.get(index - 1))){
+            contentList.add(index - 1, "");
+        }
+        if(StringUtils.isNotBlank(contentList.get(index))){
+            contentList.add(index, "");
+        }
+        contentList.add(index, code);
     }
 
 
