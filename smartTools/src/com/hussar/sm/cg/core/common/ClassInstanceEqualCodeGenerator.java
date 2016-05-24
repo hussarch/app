@@ -24,15 +24,16 @@ public class ClassInstanceEqualCodeGenerator extends CommonCodeGenerator{
         appendln("    if (this == obj) {");
         appendln("        return true;");
         appendln("    }");
+        appendln("    if (obj == null) {");
+        appendln("        return false;");
+        appendln("    }");
         if(hasSuperClass(clazz)){
             appendln("    if (!super.equals(obj)) {");
             appendln("        return false;");
             appendln("    }");
         }
-        appendln("    if (obj == null) {");
-        appendln("        return false;");
-        appendln("    }");
-        append(  "    ").append(clazz.getSimpleName()).append(" other = (").append(clazz.getSimpleName()).append(")obj;").append(NEW_LINE);
+        
+        append(   "    ").append(clazz.getSimpleName()).append(" other = (").append(clazz.getSimpleName()).append(")obj;").append(NEW_LINE);
         StringBuilder inner = new StringBuilder();
         inner.append(getTab(1)).append("return ClassInstanceEqualer.getInstance(this, other)");
         Field[] fields = clazz.getDeclaredFields();

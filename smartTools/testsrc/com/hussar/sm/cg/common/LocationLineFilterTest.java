@@ -22,15 +22,8 @@ public class LocationLineFilterTest {
     }
 
     @Test
-    public void test() {
+    public void test_match() {
         assertEquals(true, filter.match("public void setName{", "p.*[(][)]{"));
-    }
-    
-    @Test
-    public void test_import_location(){
-        
-        
-        
     }
     
     private List<String> getSimpleClasContentList(){

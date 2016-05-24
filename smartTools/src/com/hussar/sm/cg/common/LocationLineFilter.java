@@ -35,7 +35,7 @@ public class LocationLineFilter {
         }
         return false;
     }
-    
+     
     private boolean patternMatches(String regx, String content){
         try{
             Pattern pattern = Pattern.compile(regx);

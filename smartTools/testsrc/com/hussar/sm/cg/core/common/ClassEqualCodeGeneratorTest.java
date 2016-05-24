@@ -55,10 +55,10 @@ public class ClassEqualCodeGeneratorTest {
                 "        if (this == obj) {\n" + 
                 "            return true;\n" + 
                 "        }\n" + 
-                "        if (!super.equals(obj)) {\n" +
-                "            return false;\n" + 
-                "        }\n" + 
                 "        if (obj == null) {\n" + 
+                "            return false;\n" + 
+                "        }\n" +
+                "        if (!super.equals(obj)) {\n" +
                 "            return false;\n" + 
                 "        }\n" + 
                 "        SubEwtEntity other = (SubEwtEntity)obj;\n" + 
